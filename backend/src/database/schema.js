@@ -5,38 +5,19 @@ const Schema = new mongoose.Schema({
     usuario: {
 
         type: String,
-        require: true
+        require: true,
+        // colletion: 'login'
 
     },
 
     senha: {
 
         type: String,
-        require: true
-
-    },
-
-    legenda: {
-
-        type: String,
-        require: true
-
-    },
-
-    indisponibilidade: {
-
-        type: String,
-        require: false
-
-    },
-
-    administrador: {
-
-        type: Boolean,
-        require: true
+        require: true,
+        // colletion: 'login'
 
     },
     
 })
 
-module.exports = mongoose.model('User', Schema)
+module.exports = mongoose.model('loginuser', Schema)
