@@ -2,16 +2,18 @@
 const express = require('express')
 const app = express()
 
+const cookieparser = require('cookie-parser')
+app.use(cookieparser())
+
 const cors = require('cors')
 app.use(cors({
 
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    // methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    origin: 'http://localhost:3000',
     credentials: true
 
 }))
 
-const cookieparser = require('cookie-parser')
-app.use(cookieparser())
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
