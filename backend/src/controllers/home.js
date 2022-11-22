@@ -1,43 +1,37 @@
 const schema = require('../database/schema')
+const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 
 exports.login = async (req, res) => {
 
     const {usuario, senha} = req.body
 
-    const dadosBD = await schema.findOne({ usuario })
+    const dadosBD = await schema.findOne({ usuario: usuario })
 
-    if(!dadosBD){
+    if(dadosBD){
 
-        res.send({ 
-            "login": null
-        })
+        if(bcrypt.compareSync(senha, dadosBD.senha)){
+
+            const token = await jwt.sign(
+
+                {"id": dadosBD._id},
+                'secret',
+                { expiresIn: 300 }
+        
+            )
+
+            res.cookie('token', token)
+            res.status(202).send({ 'login': true })
+            
+            return
+            
+        }
+        
+        res.send({ 'login': false })
         return
 
     }
 
-    if(dadosBD.senha !== senha){
-
-        res.send({ 
-            "login": false
-        })
-        return
-
-    }
-
-    const token = await jwt.sign(
-
-        {"id": dadosBD._id},
-        'secret',
-        { expiresIn: 300 }
-
-    )
-
-    // res.cookie('token', token, { httpOnly: true })
-
-    res.send({
-        "login": true,
-        "token": token
-    })
+    res.send({ 'login': false })
 
 }
